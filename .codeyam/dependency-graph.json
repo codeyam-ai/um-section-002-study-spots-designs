@@ -1,0 +1,238 @@
+{
+  "files": {
+    ".claude/hooks/_step_metadata.py": {
+      "imports": [],
+      "importedBy": []
+    },
+    ".claude/hooks/editor-pretool-hook.py": {
+      "imports": [],
+      "importedBy": []
+    },
+    ".claude/hooks/editor-step-hook.py": {
+      "imports": [],
+      "importedBy": []
+    },
+    ".claude/skills/review-session/scripts/extract-session-helpers.mjs": {
+      "imports": [],
+      "importedBy": [
+        ".claude/skills/review-session/scripts/extract-session.mjs"
+      ]
+    },
+    ".claude/skills/review-session/scripts/extract-session.mjs": {
+      "imports": [
+        ".claude/skills/review-session/scripts/extract-session-helpers.mjs",
+        ".claude/skills/review-session/scripts/session-tokens.mjs",
+        ".claude/skills/review-session/scripts/session-tokens-report.mjs",
+        ".claude/skills/review-session/scripts/session-tokens-subagents.mjs"
+      ],
+      "importedBy": []
+    },
+    ".claude/skills/review-session/scripts/find-last-session-helpers.mjs": {
+      "imports": [],
+      "importedBy": [
+        ".claude/skills/review-session/scripts/find-last-session.mjs"
+      ]
+    },
+    ".claude/skills/review-session/scripts/find-last-session.mjs": {
+      "imports": [
+        ".claude/skills/review-session/scripts/find-last-session-helpers.mjs"
+      ],
+      "importedBy": []
+    },
+    ".claude/skills/review-session/scripts/session-tokens-carried.mjs": {
+      "imports": [],
+      "importedBy": [
+        ".claude/skills/review-session/scripts/session-tokens.mjs"
+      ]
+    },
+    ".claude/skills/review-session/scripts/session-tokens-labels.mjs": {
+      "imports": [],
+      "importedBy": [
+        ".claude/skills/review-session/scripts/session-tokens.mjs"
+      ]
+    },
+    ".claude/skills/review-session/scripts/session-tokens-report.mjs": {
+      "imports": [
+        ".claude/skills/review-session/scripts/session-tokens.mjs"
+      ],
+      "importedBy": [
+        ".claude/skills/review-session/scripts/extract-session.mjs"
+      ]
+    },
+    ".claude/skills/review-session/scripts/session-tokens-steps.mjs": {
+      "imports": [],
+      "importedBy": [
+        ".claude/skills/review-session/scripts/session-tokens.mjs"
+      ]
+    },
+    ".claude/skills/review-session/scripts/session-tokens-subagents.mjs": {
+      "imports": [],
+      "importedBy": [
+        ".claude/skills/review-session/scripts/extract-session.mjs"
+      ]
+    },
+    ".claude/skills/review-session/scripts/session-tokens.mjs": {
+      "imports": [
+        ".claude/skills/review-session/scripts/session-tokens-carried.mjs",
+        ".claude/skills/review-session/scripts/session-tokens-labels.mjs",
+        ".claude/skills/review-session/scripts/session-tokens-steps.mjs"
+      ],
+      "importedBy": [
+        ".claude/skills/review-session/scripts/session-tokens-report.mjs",
+        ".claude/skills/review-session/scripts/extract-session.mjs"
+      ]
+    },
+    "mockups/01-clean-dashboard-mockup.html": {
+      "imports": [],
+      "importedBy": []
+    },
+    "mockups/02-atlas-mockup.html": {
+      "imports": [],
+      "importedBy": []
+    },
+    "mockups/03-marquee-mockup.html": {
+      "imports": [],
+      "importedBy": []
+    },
+    "mockups/04-offcatalog-mockup.html": {
+      "imports": [],
+      "importedBy": []
+    },
+    "mockups/05-offcatalog-mockup.html": {
+      "imports": [],
+      "importedBy": []
+    },
+    "mockups/06-offcatalog-mockup.html": {
+      "imports": [],
+      "importedBy": []
+    }
+  },
+  "entities": {
+    ".claude/skills/review-session/scripts/extract-session-helpers.mjs::buildConversationTurns": {
+      "filePath": ".claude/skills/review-session/scripts/extract-session-helpers.mjs",
+      "name": "buildConversationTurns",
+      "imports": [],
+      "importedBy": [
+        ".claude/skills/review-session/scripts/extract-session.mjs::__file_root__"
+      ]
+    },
+    ".claude/skills/review-session/scripts/extract-session-helpers.mjs::detectFormat": {
+      "filePath": ".claude/skills/review-session/scripts/extract-session-helpers.mjs",
+      "name": "detectFormat",
+      "imports": [],
+      "importedBy": [
+        ".claude/skills/review-session/scripts/extract-session.mjs::__file_root__"
+      ]
+    },
+    ".claude/skills/review-session/scripts/extract-session-helpers.mjs::detectFormatFromPath": {
+      "filePath": ".claude/skills/review-session/scripts/extract-session-helpers.mjs",
+      "name": "detectFormatFromPath",
+      "imports": [],
+      "importedBy": [
+        ".claude/skills/review-session/scripts/extract-session.mjs::__file_root__"
+      ]
+    },
+    ".claude/skills/review-session/scripts/extract-session.mjs::__file_root__": {
+      "filePath": ".claude/skills/review-session/scripts/extract-session.mjs",
+      "name": "__file_root__",
+      "imports": [
+        ".claude/skills/review-session/scripts/extract-session-helpers.mjs::buildConversationTurns",
+        ".claude/skills/review-session/scripts/extract-session-helpers.mjs::detectFormat",
+        ".claude/skills/review-session/scripts/extract-session-helpers.mjs::detectFormatFromPath",
+        ".claude/skills/review-session/scripts/session-tokens.mjs::profileSession",
+        ".claude/skills/review-session/scripts/session-tokens-report.mjs::renderTokensMarkdown",
+        ".claude/skills/review-session/scripts/session-tokens-subagents.mjs::readSubagentLines"
+      ],
+      "importedBy": []
+    },
+    ".claude/skills/review-session/scripts/find-last-session-helpers.mjs::claudeProjectHashFromPath": {
+      "filePath": ".claude/skills/review-session/scripts/find-last-session-helpers.mjs",
+      "name": "claudeProjectHashFromPath",
+      "imports": [],
+      "importedBy": [
+        ".claude/skills/review-session/scripts/find-last-session.mjs::__file_root__"
+      ]
+    },
+    ".claude/skills/review-session/scripts/find-last-session-helpers.mjs::readBuildSessionIds": {
+      "filePath": ".claude/skills/review-session/scripts/find-last-session-helpers.mjs",
+      "name": "readBuildSessionIds",
+      "imports": [],
+      "importedBy": [
+        ".claude/skills/review-session/scripts/find-last-session.mjs::__file_root__"
+      ]
+    },
+    ".claude/skills/review-session/scripts/find-last-session-helpers.mjs::sessionSourceLabel": {
+      "filePath": ".claude/skills/review-session/scripts/find-last-session-helpers.mjs",
+      "name": "sessionSourceLabel",
+      "imports": [],
+      "importedBy": [
+        ".claude/skills/review-session/scripts/find-last-session.mjs::__file_root__"
+      ]
+    },
+    ".claude/skills/review-session/scripts/find-last-session.mjs::__file_root__": {
+      "filePath": ".claude/skills/review-session/scripts/find-last-session.mjs",
+      "name": "__file_root__",
+      "imports": [
+        ".claude/skills/review-session/scripts/find-last-session-helpers.mjs::claudeProjectHashFromPath",
+        ".claude/skills/review-session/scripts/find-last-session-helpers.mjs::readBuildSessionIds",
+        ".claude/skills/review-session/scripts/find-last-session-helpers.mjs::sessionSourceLabel"
+      ],
+      "importedBy": []
+    },
+    ".claude/skills/review-session/scripts/session-tokens-carried.mjs::createCarriedTracker": {
+      "filePath": ".claude/skills/review-session/scripts/session-tokens-carried.mjs",
+      "name": "createCarriedTracker",
+      "imports": [],
+      "importedBy": [
+        ".claude/skills/review-session/scripts/session-tokens.mjs::__file_root__"
+      ]
+    },
+    ".claude/skills/review-session/scripts/session-tokens-report.mjs::__file_root__": {
+      "filePath": ".claude/skills/review-session/scripts/session-tokens-report.mjs",
+      "name": "__file_root__",
+      "imports": [
+        ".claude/skills/review-session/scripts/session-tokens.mjs::__file_root__"
+      ],
+      "importedBy": []
+    },
+    ".claude/skills/review-session/scripts/session-tokens-report.mjs::renderTokensMarkdown": {
+      "filePath": ".claude/skills/review-session/scripts/session-tokens-report.mjs",
+      "name": "renderTokensMarkdown",
+      "imports": [],
+      "importedBy": [
+        ".claude/skills/review-session/scripts/extract-session.mjs::__file_root__"
+      ]
+    },
+    ".claude/skills/review-session/scripts/session-tokens-subagents.mjs::readSubagentLines": {
+      "filePath": ".claude/skills/review-session/scripts/session-tokens-subagents.mjs",
+      "name": "readSubagentLines",
+      "imports": [],
+      "importedBy": [
+        ".claude/skills/review-session/scripts/extract-session.mjs::__file_root__"
+      ]
+    },
+    ".claude/skills/review-session/scripts/session-tokens.mjs::__file_root__": {
+      "filePath": ".claude/skills/review-session/scripts/session-tokens.mjs",
+      "name": "__file_root__",
+      "imports": [
+        ".claude/skills/review-session/scripts/session-tokens-carried.mjs::createCarriedTracker",
+        ".claude/skills/review-session/scripts/session-tokens-labels.mjs::sourcesForToolUse",
+        ".claude/skills/review-session/scripts/session-tokens-steps.mjs::stepFromBanner",
+        ".claude/skills/review-session/scripts/session-tokens-steps.mjs::stepFromHook",
+        ".claude/skills/review-session/scripts/session-tokens-steps.mjs::stepLabel"
+      ],
+      "importedBy": [
+        ".claude/skills/review-session/scripts/session-tokens-report.mjs::__file_root__"
+      ]
+    },
+    ".claude/skills/review-session/scripts/session-tokens.mjs::profileSession": {
+      "filePath": ".claude/skills/review-session/scripts/session-tokens.mjs",
+      "name": "profileSession",
+      "imports": [],
+      "importedBy": [
+        ".claude/skills/review-session/scripts/extract-session.mjs::__file_root__"
+      ]
+    }
+  },
+  "lastUpdated": "2026-10-28T15:41:42Z"
+}

@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="codeyam-viewport" content="mobile">
+<title>Blueprint plan, floor by floor</title>
+<style>
+  :root {
+    --field: #00274c;
+    --field-deep: #001d3a;
+    --grid: rgba(255, 255, 255, 0.05);
+    --grid-major: rgba(255, 255, 255, 0.09);
+    --line: rgba(255, 255, 255, 0.55);
+    --line-faint: rgba(255, 255, 255, 0.22);
+    --text: #ffffff;
+    --text-soft: #b7c6d9;
+    --text-faint: #7d93b0;
+    --maize: #ffcb05;
+    --open: #34c77b;
+    --few: #ff9a3d;
+    --full: #ff5b52;
+    --tick-dim: rgba(255, 255, 255, 0.14);
+    --rule: rgba(255, 255, 255, 0.16);
+    --font: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    --tick: 11px;
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--field); }
+  body {
+    font-family: var(--font); color: var(--text); -webkit-font-smoothing: antialiased; min-height: 844px; position: relative; overflow: hidden;
+    background-color: var(--field);
+    background-image:
+      linear-gradient(var(--grid-major) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-major) 1px, transparent 1px),
+      linear-gradient(var(--grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 80px 80px, 80px 80px, 16px 16px, 16px 16px;
+  }
+  button, a { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; text-decoration: none; }
+  button:focus-visible, a:focus-visible { outline: 2px solid var(--maize); outline-offset: 2px; }
+
+  .top { padding: 54px 16px 0; display: flex; justify-content: space-between; align-items: baseline; }
+  .word { font-weight: 700; font-size: 19px; letter-spacing: -0.02em; }
+  .campus { font-size: 14px; color: var(--text-soft); display: inline-flex; gap: 4px; align-items: center; }
+  .campus b { color: var(--text); font-weight: 600; }
+
+  .plan { margin-top: 8px; position: relative; }
+  .plan svg { display: block; width: 390px; height: 300px; }
+
+  .key { padding: 0 16px; display: flex; gap: 16px; font-size: 12px; color: var(--text-soft); align-items: center; }
+  .key span { display: inline-flex; gap: 6px; align-items: center; }
+  .key i { width: 10px; height: 10px; }
+  .key .o { background: var(--open); } .key .f { background: var(--few); } .key .x { background: var(--full); }
+  .key .upd { margin-left: auto; color: var(--text-faint); }
+
+  .floors { margin: 18px 16px 0; border-top: 1px solid var(--rule); padding-top: 12px; }
+  .floors-head { display: flex; justify-content: space-between; align-items: baseline; }
+  .floors-head h1 { font-size: 20px; font-weight: 700; letter-spacing: -0.02em; text-wrap: balance; }
+  .floors-head h1 span { display: block; font-size: 13px; font-weight: 400; color: var(--text-soft); letter-spacing: 0; margin-top: 2px; }
+  .floors-head .tot { font-size: 34px; font-weight: 300; letter-spacing: -0.03em; color: var(--open); font-variant-numeric: tabular-nums; line-height: 1; }
+
+  .fl { display: grid; grid-template-columns: 64px 1fr 40px; align-items: center; height: 30px; font-size: 13px; }
+  .fl:first-of-type { margin-top: 10px; }
+  .fl .lv { color: var(--text-soft); }
+  .fl .lv b { color: var(--text); font-weight: 600; }
+  .fl .n { text-align: right; font-variant-numeric: tabular-nums; font-weight: 600; }
+  .ticks { position: relative; height: 12px; width: calc(var(--tick) * 20); background: repeating-linear-gradient(90deg, var(--tick-dim) 0 8px, transparent 8px var(--tick)); }
+  .ticks i { position: absolute; left: 0; top: 0; bottom: 0; background: repeating-linear-gradient(90deg, var(--open) 0 8px, transparent 8px var(--tick)); }
+  .fl.best { background: linear-gradient(90deg, rgba(255, 203, 5, 0.12), rgba(255, 203, 5, 0)); margin: 0 -8px; padding: 0 8px; grid-template-columns: 64px 1fr 40px; }
+  .fl.best .lv b::after { content: " "; }
+  .note { margin-top: 4px; font-size: 12px; color: var(--text-soft); padding-left: 64px; }
+
+  .closing { position: absolute; left: 16px; right: 16px; bottom: 96px; display: flex; gap: 10px; align-items: center; padding: 10px 0 0; border-top: 1px solid var(--rule); font-size: 13px; color: var(--text-soft); }
+  .closing b { color: var(--few); font-weight: 600; }
+
+  .nav { position: absolute; left: 0; right: 0; bottom: 0; height: 82px; background: var(--field-deep); border-top: 1px solid var(--rule); display: grid; grid-template-columns: repeat(4, 1fr); padding: 10px 8px calc(22px + env(safe-area-inset-bottom)); }
+  .nav button { display: flex; flex-direction: column; align-items: center; gap: 3px; font-size: 11px; color: var(--text-faint); }
+  .nav button.on { color: var(--maize); font-weight: 600; }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+  <header class="top">
+    <div class="word">Stacks</div>
+    <button class="campus"><b>Central Campus</b>
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+    </button>
+  </header>
+
+  <section class="plan" aria-label="Plan of Central Campus">
+    <svg viewBox="0 0 390 300" width="390" height="300" role="img" aria-label="Line drawing of Central Campus. Buildings filled green when open, orange when nearly full, red when full.">
+      <g stroke="var(--line-faint)" stroke-width="1" fill="none">
+        <path d="M0 42 H390 M0 52 H390"/>
+        <path d="M0 214 H390 M0 224 H390"/>
+        <path d="M72 0 V300 M82 0 V300"/>
+        <path d="M300 0 V300 M310 0 V300"/>
+      </g>
+      <g font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="8" fill="var(--text-faint)" letter-spacing="0.02em">
+        <text x="330" y="49">N University</text>
+        <text x="330" y="221">S University</text>
+        <text x="86" y="296">State St</text>
+      </g>
+      <!-- the Diag -->
+      <rect x="124" y="96" width="162" height="102" fill="none" stroke="var(--line)" stroke-width="1"/>
+      <path d="M124 96 L286 198 M286 96 L124 198 M205 96 V198 M124 147 H286" stroke="var(--line)" stroke-width="1" fill="none"/>
+      <circle cx="205" cy="147" r="7" fill="none" stroke="var(--line)" stroke-width="1"/>
+      <!-- context buildings, outline only -->
+      <g fill="none" stroke="var(--line-faint)">
+        <rect x="18" y="62" width="44" height="44"/><rect x="18" y="116" width="44" height="40"/>
+        <rect x="318" y="96" width="60" height="50"/><rect x="318" y="234" width="60" height="56"/>
+        <rect x="160" y="236" width="34" height="54"/>
+      </g>
+      <!-- status buildings -->
+      <rect x="112" y="8" width="46" height="26" fill="var(--few)"/>
+      <rect x="318" y="6" width="60" height="28" fill="var(--open)"/>
+      <rect x="146" y="58" width="72" height="30" fill="var(--open)" stroke="var(--maize)" stroke-width="2.5"/>
+      <rect x="224" y="54" width="44" height="34" fill="var(--few)"/>
+      <rect x="90" y="60" width="24" height="112" fill="var(--full)"/>
+      <rect x="18" y="168" width="44" height="40" fill="var(--open)"/>
+      <rect x="90" y="232" width="62" height="44" fill="var(--open)"/>
+      <rect x="208" y="234" width="78" height="50" fill="var(--full)"/>
+      <!-- leader labels -->
+      <g stroke="var(--line)" stroke-width="0.8" fill="none">
+        <path d="M182 58 V30 H226"/>
+      </g>
+      <g font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="10" fill="var(--text)">
+        <text x="229" y="27" font-weight="700">Hatcher</text>
+        <text x="229" y="38" fill="var(--open)" font-weight="600">128 open</text>
+        <text x="236" y="102" font-weight="600" text-anchor="middle">Shapiro 14</text>
+        <text x="135" y="21" font-weight="600" text-anchor="middle" fill="var(--field)">League</text>
+        <text x="348" y="24" font-weight="600" text-anchor="middle" fill="var(--field)">Taubman</text>
+        <text x="40" y="192" font-weight="600" text-anchor="middle" fill="var(--field)">Union</text>
+        <text x="121" y="258" font-weight="600" text-anchor="middle" fill="var(--field)">Law</text>
+        <text x="247" y="263" font-weight="600" text-anchor="middle" fill="var(--text)">Ross, full</text>
+        <text x="102" y="116" font-weight="600" text-anchor="middle" fill="var(--field)" transform="rotate(-90 102 116)" dy="3.5">Fishbowl, full</text>
+      </g>
+      <!-- you -->
+      <circle cx="120" cy="196" r="12" fill="none" stroke="var(--maize)" stroke-width="1" opacity="0.6"/>
+      <circle cx="120" cy="196" r="4.5" fill="var(--maize)"/>
+      <text x="132" y="207" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="9" fill="var(--maize)" font-weight="600">You</text>
+    </svg>
+  </section>
+
+  <div class="key" aria-hidden="true">
+    <span><i class="o"></i>Open</span><span><i class="f"></i>Few left</span><span><i class="x"></i>Full</span>
+    <span class="upd">Updated 1 min ago</span>
+  </div>
+
+  <section class="floors" aria-label="Hatcher, open desks by floor">
+    <div class="floors-head">
+      <h1>Hatcher, by floor<span>4 min walk. Open until 11&nbsp;PM.</span></h1>
+      <div class="tot">128</div>
+    </div>
+    <div class="fl"><span class="lv"><b>6</b> Stacks</span><span class="ticks"><i style="width: calc(var(--tick) * 7)"></i></span><span class="n">31</span></div>
+    <div class="fl"><span class="lv"><b>5</b></span><span class="ticks"><i style="width: calc(var(--tick) * 3)"></i></span><span class="n">18</span></div>
+    <div class="fl"><span class="lv"><b>4</b></span><span class="ticks"><i style="width: calc(var(--tick) * 2)"></i></span><span class="n">9</span></div>
+    <div class="fl"><span class="lv"><b>3</b></span><span class="ticks"><i style="width: calc(var(--tick) * 4)"></i></span><span class="n">22</span></div>
+    <div class="fl best"><span class="lv"><b>2</b> Reading Rm</span><span class="ticks"><i style="width: calc(var(--tick) * 6)"></i></span><span class="n">40</span></div>
+    <p class="note">Big windows and outlets at every table. Your best match.</p>
+    <div class="fl"><span class="lv"><b>1</b></span><span class="ticks"><i style="width: calc(var(--tick) * 2)"></i></span><span class="n">8</span></div>
+  </section>
+
+  <div class="closing" role="status">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--few)" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+    <span><b>Law Reading Room closes at 4:00&nbsp;PM</b>, in 1&nbsp;hr 12&nbsp;min.</span>
+  </div>
+
+  <nav class="nav" aria-label="Main">
+    <button class="on" aria-current="page"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M3 6.5 9 4l6 2.5L21 4v13.5L15 20l-6-2.5L3 20z"/><path d="M9 4v13.5M15 6.5V20"/></svg>Plan</button>
+    <button><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M8 6h13M8 12h13M8 18h13M3.5 6h.01M3.5 12h.01M3.5 18h.01"/></svg>List</button>
+    <button><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="m12 3.5 2.6 5.3 5.9.9-4.3 4.1 1 5.8-5.2-2.7-5.2 2.7 1-5.8L3.5 9.7l5.9-.9z"/></svg>Saved</button>
+    <button><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg>Preferences</button>
+  </nav>
+</body>
+</html>

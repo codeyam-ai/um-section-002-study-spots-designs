@@ -1,0 +1,16 @@
+# UMich study spots: design directions
+
+Six mobile mockups for a study-space capacity app for University of Michigan students. Each one shows the same screen, the campus heat map, so the directions can be compared side by side: which libraries and study spots have open desks or group tables right now, in maize and blue, with green for open and red for full.
+
+Every mockup is a single self-contained HTML file. Open any of them in a browser (they're sized for a 390×844 phone screen).
+
+| # | Direction | File |
+|---|---|---|
+| 1 | Calm and clear: shaded map with a nearby list | [mockups/01-clean-dashboard-mockup.html](mockups/01-clean-dashboard-mockup.html) |
+| 2 | Seat counts up front: big number, small map, table of spots | [mockups/02-atlas-mockup.html](mockups/02-atlas-mockup.html) |
+| 3 | Maize scoreboard: campus as a grid of status tiles | [mockups/03-marquee-mockup.html](mockups/03-marquee-mockup.html) |
+| 4 | Campus at night: tilted 3D view with glowing heat | [mockups/04-offcatalog-mockup.html](mockups/04-offcatalog-mockup.html) |
+| 5 | Blueprint: architect's plan with seats by floor | [mockups/05-offcatalog-mockup.html](mockups/05-offcatalog-mockup.html) |
+| 6 | Walking-time rings: spots placed by minutes away | [mockups/06-offcatalog-mockup.html](mockups/06-offcatalog-mockup.html) |
+
+"Stacks" is a placeholder app name. Seat counts, hours and walking times are sample data.

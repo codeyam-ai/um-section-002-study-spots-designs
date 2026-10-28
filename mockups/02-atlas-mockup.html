@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="codeyam-viewport" content="mobile">
+<title>Seat counts up front</title>
+<style>
+  :root {
+    --bg: #f4f5f7;
+    --paper: #ffffff;
+    --ink: #0a1426;
+    --ink-soft: #4d5566;
+    --muted: #8b92a3;
+    --line: #e5e8ee;
+    --line-soft: #f0f2f6;
+
+    --accent: #00274c;
+    --accent-rgb: 0, 39, 76;
+    --accent-soft: #3a6aa8;
+    --accent-on: #ffffff;
+    --maize: #ffcb05;
+    --pale: #f2f5fa;
+    --ice: #e4ebf5;
+
+    --open: #17894a;
+    --few: #d4610c;
+    --full: #cc2f2a;
+    --open-tint: rgba(23, 137, 74, 0.16);
+    --few-tint: rgba(212, 97, 12, 0.16);
+    --full-tint: rgba(204, 47, 42, 0.16);
+
+    --r-sm: 10px;
+    --r-md: 16px;
+    --r-lg: 22px;
+    --r-pill: 999px;
+
+    --display: "Schibsted Grotesk", "Helvetica Neue", system-ui, sans-serif;
+    --body: "Hanken Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+    color-scheme: light;
+  }
+  :root[data-theme="dark"] {
+    --bg: #07101f;
+    --paper: #0f1a2e;
+    --ink: #eef0f8;
+    --ink-soft: #a8afc2;
+    --muted: #6b7388;
+    --line: #22304a;
+    --line-soft: #172338;
+    --accent: #7fa8e0;
+    --accent-rgb: 127, 168, 224;
+    --accent-soft: #4f7bb8;
+    --accent-on: #07101f;
+    --pale: rgba(127, 168, 224, 0.08);
+    --ice: rgba(127, 168, 224, 0.16);
+    --open: #40c47e;
+    --few: #f08a3c;
+    --full: #f0645c;
+    --open-tint: rgba(64, 196, 126, 0.22);
+    --few-tint: rgba(240, 138, 60, 0.22);
+    --full-tint: rgba(240, 100, 92, 0.22);
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--bg); }
+  body { font-family: var(--body); color: var(--ink); font-size: 14px; line-height: 1.5; -webkit-font-smoothing: antialiased; min-height: 844px; position: relative; overflow: hidden; }
+  button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+  button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  .wrap { padding: 54px 16px 0; }
+  .head { display: flex; align-items: center; justify-content: space-between; }
+  .brand { display: flex; align-items: center; gap: 10px; font-family: var(--display); font-weight: 600; font-size: 17px; letter-spacing: -0.02em; }
+  .brand i { width: 26px; height: 26px; border-radius: 8px; background: var(--accent); position: relative; }
+  .brand i::after { content: ""; position: absolute; left: 7px; right: 7px; bottom: 7px; height: 4px; background: var(--maize); border-radius: 1px; }
+  .icons { display: flex; gap: 8px; }
+  .ibtn { width: 36px; height: 36px; border-radius: 50%; background: var(--paper); border: 1px solid var(--line); display: grid; place-items: center; color: var(--ink-soft); }
+
+  .eyebrow { margin-top: 22px; display: flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+  .eyebrow .sq { width: 7px; height: 7px; background: var(--accent); }
+
+  .headline { margin-top: 8px; display: grid; grid-template-columns: auto 1fr; gap: 0 14px; align-items: end; }
+  .big { font-family: var(--display); font-weight: 600; font-size: 92px; line-height: 0.86; letter-spacing: -0.05em; font-variant-numeric: tabular-nums; color: var(--open); }
+  .headline-txt h1 { font-family: var(--display); font-weight: 500; font-size: 22px; line-height: 1.1; letter-spacing: -0.025em; text-wrap: balance; }
+  .headline-txt h1 em { font-style: italic; color: var(--accent); }
+  .headline-txt p { margin-top: 4px; font-size: 13px; color: var(--ink-soft); }
+
+  .bento { margin-top: 18px; display: grid; grid-template-columns: 1.5fr 1fr; gap: 8px; }
+  .card { background: var(--paper); border: 1px solid var(--line); border-radius: var(--r-lg); }
+  .mapc { grid-row: span 2; padding: 0; overflow: hidden; position: relative; }
+  .mapc svg { display: block; width: 100%; height: 100%; }
+  .maplabel { position: absolute; left: 12px; top: 10px; font-family: var(--mono); font-size: 9px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+  .kpi { padding: 12px 14px; }
+  .kpi .l { font-size: 12px; color: var(--ink-soft); }
+  .kpi .v { font-family: var(--display); font-weight: 600; font-size: 28px; letter-spacing: -0.03em; line-height: 1.05; font-variant-numeric: tabular-nums; margin-top: 2px; }
+  .kpi .v small { font-size: 14px; color: var(--muted); font-weight: 500; letter-spacing: 0; }
+  .kpi.warn { background: var(--few-tint); border-color: transparent; }
+  .kpi.warn .v { font-size: 20px; color: var(--few); }
+  :root[data-theme="dark"] .kpi.warn .v { color: var(--few); }
+
+  .tabsrow { margin-top: 18px; display: flex; gap: 6px; }
+  .tchip { height: 30px; padding: 0 14px; border-radius: var(--r-pill); font-size: 13px; font-weight: 500; color: var(--ink-soft); }
+  .tchip.on { background: var(--accent); color: var(--accent-on); font-weight: 600; }
+
+  .ledger { margin-top: 10px; background: var(--paper); border: 1px solid var(--line); border-radius: var(--r-lg); overflow: hidden; }
+  .lh, .lr { display: grid; grid-template-columns: 1fr 48px 52px 52px; align-items: center; padding: 0 14px; }
+  .lh { height: 30px; background: var(--pale); border-bottom: 1px solid var(--line); font-family: var(--mono); font-size: 9px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+  .lh span:not(:first-child), .lr > span:not(:first-child) { text-align: right; }
+  .lr { height: 46px; border-bottom: 1px solid var(--line-soft); }
+  .lr:last-child { border-bottom: 0; }
+  .lr .n { font-weight: 600; font-size: 14px; line-height: 1.2; }
+  .lr .n small { display: block; font-weight: 400; font-size: 11px; color: var(--muted); }
+  .lr .n small.c { color: var(--few); font-weight: 600; }
+  .walk { font-family: var(--mono); font-size: 11px; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .num { font-family: var(--display); font-weight: 600; font-size: 16px; font-variant-numeric: tabular-nums; }
+  .o { color: var(--open); } .f { color: var(--few); } .x { color: var(--full); }
+
+  .nav { position: absolute; left: 0; right: 0; bottom: 0; height: 82px; background: var(--paper); border-top: 1px solid var(--line); display: grid; grid-template-columns: repeat(4, 1fr); padding: 10px 8px calc(22px + env(safe-area-inset-bottom)); }
+  .nav button { display: flex; flex-direction: column; align-items: center; gap: 3px; font-size: 11px; color: var(--muted); }
+  .nav button.on { color: var(--accent); font-weight: 600; }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="head">
+      <div class="brand"><i aria-hidden="true"></i>Stacks</div>
+      <div class="icons">
+        <button class="ibtn" aria-label="Search">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        </button>
+        <button class="ibtn" aria-label="Filters">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <div class="eyebrow"><span class="sq" aria-hidden="true"></span>Best match for a desk · 2:48 PM</div>
+    <section class="headline">
+      <div class="big">128</div>
+      <div class="headline-txt">
+        <h1>desks open at <em>Hatcher</em></h1>
+        <p>4 min walk. Open until 11&nbsp;PM.</p>
+      </div>
+    </section>
+
+    <section class="bento">
+      <div class="card mapc" aria-label="Campus heat map">
+        <span class="maplabel">Central Campus</span>
+        <svg viewBox="0 0 200 188" width="200" height="188" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Campus map with buildings sized by open seats">
+          <g stroke="var(--line)" stroke-width="1">
+            <path d="M0 36 H200 M0 150 H200 M40 0 V188 M170 0 V188"/>
+            <path d="M70 62 L150 128 M150 62 L70 128" stroke-dasharray="2 3"/>
+          </g>
+          <circle cx="104" cy="52" r="26" fill="var(--open-tint)"/>
+          <circle cx="104" cy="52" r="5" fill="var(--open)"/>
+          <circle cx="140" cy="48" r="13" fill="var(--few-tint)"/>
+          <circle cx="140" cy="48" r="4" fill="var(--few)"/>
+          <circle cx="50" cy="98" r="12" fill="var(--full-tint)"/>
+          <circle cx="50" cy="98" r="4" fill="var(--full)"/>
+          <circle cx="20" cy="132" r="18" fill="var(--open-tint)"/>
+          <circle cx="20" cy="132" r="4" fill="var(--open)"/>
+          <circle cx="68" cy="166" r="14" fill="var(--open-tint)"/>
+          <circle cx="68" cy="166" r="4" fill="var(--open)"/>
+          <circle cx="142" cy="166" r="14" fill="var(--full-tint)"/>
+          <circle cx="142" cy="166" r="4" fill="var(--full)"/>
+          <circle cx="78" cy="20" r="10" fill="var(--few-tint)"/>
+          <circle cx="78" cy="20" r="3.5" fill="var(--few)"/>
+          <circle cx="184" cy="16" r="20" fill="var(--open-tint)"/>
+          <circle cx="184" cy="16" r="4" fill="var(--open)"/>
+          <circle cx="60" cy="112" r="4.5" fill="var(--accent)" stroke="var(--paper)" stroke-width="2"/>
+          <g font-family="Hanken Grotesk, system-ui, sans-serif" font-size="8" font-weight="600" fill="var(--ink-soft)">
+            <text x="104" y="84" text-anchor="middle">Hatcher</text>
+            <text x="68" y="184" text-anchor="middle">Law</text>
+            <text x="142" y="184" text-anchor="middle">Ross</text>
+            <text x="66" y="124">You</text>
+          </g>
+        </svg>
+      </div>
+      <div class="card kpi">
+        <div class="l">Spots with room</div>
+        <div class="v">6 <small>of 9</small></div>
+      </div>
+      <div class="card kpi warn">
+        <div class="l">Closes soon</div>
+        <div class="v">Law, 4:00</div>
+      </div>
+    </section>
+
+    <div class="tabsrow" role="tablist" aria-label="Seat type">
+      <button class="tchip on" role="tab" aria-selected="true">Desks</button>
+      <button class="tchip" role="tab" aria-selected="false">Group tables</button>
+      <button class="tchip" role="tab" aria-selected="false">Saved</button>
+    </div>
+
+    <section class="ledger" aria-label="All study spots">
+      <div class="lh"><span>Spot</span><span>Walk</span><span>Desks</span><span>Tables</span></div>
+      <div class="lr"><span class="n">Fishbowl<small>Angell Hall</small></span><span class="walk">1 min</span><span class="num x">0</span><span class="num x">0</span></div>
+      <div class="lr"><span class="n">Law Reading Room<small class="c">Closes in 1 hr 12 min</small></span><span class="walk">3 min</span><span class="num o">22</span><span class="num f">1</span></div>
+      <div class="lr"><span class="n">Hatcher<small>Graduate Library</small></span><span class="walk">4 min</span><span class="num o">128</span><span class="num o">6</span></div>
+      <div class="lr"><span class="n">Shapiro<small>Open 24 hours</small></span><span class="walk">5 min</span><span class="num f">14</span><span class="num f">1</span></div>
+      <div class="lr"><span class="n">Michigan Union<small>Until 2 AM</small></span><span class="walk">6 min</span><span class="num o">61</span><span class="num o">4</span></div>
+      <div class="lr"><span class="n">Ross<small>Kresge Library</small></span><span class="walk">7 min</span><span class="num x">0</span><span class="num x">0</span></div>
+    </section>
+  </div>
+
+  <nav class="nav" aria-label="Main">
+    <button class="on" aria-current="page"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M3 6.5 9 4l6 2.5L21 4v13.5L15 20l-6-2.5L3 20z"/><path d="M9 4v13.5M15 6.5V20"/></svg>Map</button>
+    <button><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M8 6h13M8 12h13M8 18h13M3.5 6h.01M3.5 12h.01M3.5 18h.01"/></svg>List</button>
+    <button><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="m12 3.5 2.6 5.3 5.9.9-4.3 4.1 1 5.8-5.2-2.7-5.2 2.7 1-5.8L3.5 9.7l5.9-.9z"/></svg>Saved</button>
+    <button><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 20c1.5-3.5 4.5-5 8-5s6.5 1.5 8 5"/></svg>You</button>
+  </nav>
+</body>
+</html>

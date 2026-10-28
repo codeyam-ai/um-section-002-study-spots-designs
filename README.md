@@ -1,6 +1,6 @@
 # UMich study spots: design directions
 
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/codeyam-ai/umich-study-spots-designs?quickstart=1)
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/codeyam-ai/um-section-002-study-spots-designs?quickstart=1)
 
 Six mobile mockups for a study-space capacity app for University of Michigan students. Each one shows the same screen, the campus heat map, so the directions can be compared side by side: which libraries and study spots have open desks or group tables right now, in maize and blue, with green for open and red for full.
 

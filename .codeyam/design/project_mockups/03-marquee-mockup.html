@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="codeyam-viewport" content="mobile">
+<title>Maize scoreboard of campus</title>
+<style>
+  :root {
+    --bg: #ffcb05;
+    --cell: #ffd426;
+    --ink: #00274c;
+    --ink-soft: #2a4466;
+    --on-ink: #ffcb05;
+    --line: #00274c;
+    --open: #12804a;
+    --open-on: #ffffff;
+    --few-bg: #ffffff;
+    --few: #c2410c;
+    --full: #c8261f;
+    --full-on: #ffffff;
+    --nav-bg: #00274c;
+    --nav-ink: #9fb3cc;
+    --nav-on: #ffcb05;
+
+    --display: "Helvetica Neue", "Arial Narrow", "Roboto Condensed", Arial, sans-serif;
+    --body: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color-scheme: light;
+  }
+  :root[data-theme="dark"] {
+    --bg: #001a33;
+    --cell: #062544;
+    --ink: #ffcb05;
+    --ink-soft: #d7c06a;
+    --on-ink: #001a33;
+    --line: #001a33;
+    --open: #1f9d5c;
+    --few-bg: #0d2f52;
+    --few: #ff9a52;
+    --full: #d93a32;
+    --nav-bg: #00111f;
+    --nav-ink: #6f86a3;
+    --nav-on: #ffcb05;
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--bg); }
+  body { font-family: var(--body); color: var(--ink); -webkit-font-smoothing: antialiased; min-height: 844px; position: relative; overflow: hidden; }
+  button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+  button:focus-visible { outline: 3px solid var(--ink); outline-offset: 2px; }
+
+  .top { padding: 54px 16px 0; display: flex; justify-content: space-between; align-items: center; }
+  .word { font-family: var(--display); font-stretch: condensed; font-weight: 800; font-size: 20px; letter-spacing: -0.01em; }
+  .me { height: 30px; padding: 0 12px; border: 2px solid var(--ink); border-radius: 999px; font-size: 13px; font-weight: 700; display: inline-flex; align-items: center; }
+
+  .headline { display: grid; grid-template-columns: 1fr 112px; gap: 12px; padding: 14px 16px 0; align-items: end; }
+  .headline h1 { font-family: var(--display); font-stretch: condensed; font-weight: 800; line-height: 0.84; letter-spacing: -0.035em; }
+  .headline h1 .n { display: block; font-size: 128px; font-variant-numeric: tabular-nums; }
+  .headline h1 .t { display: block; font-size: 38px; letter-spacing: -0.02em; margin-top: 4px; text-wrap: balance; }
+  .rail { border-left: 2px solid var(--ink); padding: 2px 0 4px 10px; font-size: 13px; line-height: 1.35; color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+  .rail b { display: block; color: var(--ink); font-size: 15px; }
+  .rail .go { margin-top: 10px; display: inline-flex; height: 34px; align-items: center; padding: 0 14px; background: var(--ink); color: var(--on-ink); font-weight: 700; font-size: 13px; border-radius: 999px; }
+
+  .filters { display: flex; gap: 0; margin: 18px 16px 0; border: 2px solid var(--ink); }
+  .filters button { flex: 1; height: 34px; font-size: 13px; font-weight: 700; border-right: 2px solid var(--ink); }
+  .filters button:last-child { border-right: 0; }
+  .filters button.on { background: var(--ink); color: var(--on-ink); }
+
+  .board { margin: 10px 16px 0; display: grid; grid-template-columns: repeat(5, 1fr); grid-template-rows: repeat(4, 76px); gap: 2px; background: var(--line); border: 2px solid var(--line); }
+  .c { background: var(--cell); padding: 7px 8px; display: flex; flex-direction: column; justify-content: space-between; min-width: 0; }
+  .c .nm { font-size: 11px; font-weight: 700; line-height: 1.15; }
+  .c .ct { font-family: var(--display); font-stretch: condensed; font-weight: 800; font-size: 30px; line-height: 0.9; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
+  .c .ct small { font-size: 12px; font-weight: 700; letter-spacing: 0; }
+  .c.open { background: var(--open); color: var(--open-on); }
+  .c.few { background: var(--few-bg); color: var(--few); }
+  .c.few .nm { color: var(--ink); }
+  :root[data-theme="dark"] .c.few .nm { color: #e8edf4; }
+  .c.full { background: var(--full); color: var(--full-on); }
+  .c.full .ct { font-size: 22px; }
+  .c.diag { align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: var(--ink-soft); }
+  .c.far { color: var(--ink); }
+  .c.far .ct { font-size: 18px; }
+  .c.pick { box-shadow: inset 0 0 0 3px var(--bg); }
+
+  .ticker { position: absolute; left: 0; right: 0; bottom: 82px; height: 46px; background: var(--ink); color: var(--on-ink); display: flex; align-items: center; white-space: nowrap; overflow: hidden; font-weight: 700; font-size: 14px; }
+  .ticker span { padding: 0 18px; border-right: 2px solid var(--on-ink); }
+  .ticker span:first-child { padding-left: 16px; }
+
+  .nav { position: absolute; left: 0; right: 0; bottom: 0; height: 82px; background: var(--nav-bg); display: grid; grid-template-columns: repeat(4, 1fr); padding: 10px 8px calc(22px + env(safe-area-inset-bottom)); border-top: 2px solid var(--on-ink); }
+  .nav button { display: flex; flex-direction: column; align-items: center; gap: 3px; font-size: 11px; font-weight: 600; color: var(--nav-ink); }
+  .nav button.on { color: var(--nav-on); }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+  <header class="top">
+    <div class="word">Stacks</div>
+    <button class="me" aria-label="Signed in with your Michigan login">Maya O.</button>
+  </header>
+
+  <section class="headline">
+    <h1><span class="n">128</span><span class="t">desks open at Hatcher</span></h1>
+    <div class="rail">
+      <b>4 min walk</b>
+      Until 11&nbsp;PM<br>6 group tables
+      <a class="go" href="#">Walk there</a>
+    </div>
+  </section>
+
+  <div class="filters" role="tablist" aria-label="What you need">
+    <button class="on" role="tab" aria-selected="true">Desk</button>
+    <button role="tab" aria-selected="false">Table</button>
+    <button role="tab" aria-selected="false">Outlet</button>
+    <button role="tab" aria-selected="false">Window</button>
+  </div>
+
+  <section class="board" aria-label="Campus, laid out as a grid of buildings">
+    <div class="c few" style="grid-area: 1 / 2 / 2 / 3;"><span class="nm">League</span><span class="ct">9</span></div>
+    <div class="c" style="grid-area: 1 / 1 / 2 / 2;"></div>
+    <div class="c" style="grid-area: 1 / 3 / 2 / 5;"></div>
+    <div class="c open" style="grid-area: 1 / 5 / 2 / 6;"><span class="nm">Taubman</span><span class="ct">88</span></div>
+
+    <div class="c full" style="grid-area: 2 / 1 / 4 / 2;"><span class="nm">Fishbowl</span><span class="ct">Full</span></div>
+    <div class="c open pick" style="grid-area: 2 / 2 / 3 / 4;"><span class="nm">Hatcher Graduate</span><span class="ct">128</span></div>
+    <div class="c few" style="grid-area: 2 / 4 / 3 / 5;"><span class="nm">Shapiro</span><span class="ct">14</span></div>
+    <div class="c far" style="grid-area: 2 / 5 / 3 / 6;"><span class="nm">Duderstadt</span><span class="ct">140<small> North</small></span></div>
+
+    <div class="c diag" style="grid-area: 3 / 2 / 4 / 5;">The Diag</div>
+    <div class="c" style="grid-area: 3 / 5 / 4 / 6;"></div>
+
+    <div class="c open" style="grid-area: 4 / 1 / 5 / 2;"><span class="nm">Union</span><span class="ct">61</span></div>
+    <div class="c open" style="grid-area: 4 / 2 / 5 / 4;"><span class="nm">Law Reading Room</span><span class="ct">22<small> till 4</small></span></div>
+    <div class="c full" style="grid-area: 4 / 4 / 5 / 6;"><span class="nm">Ross</span><span class="ct">Full</span></div>
+  </section>
+
+  <div class="ticker" role="status" aria-label="Updates">
+    <span>Law Reading Room closes at 4:00&nbsp;PM</span>
+    <span>Ross has been full since 1:30</span>
+    <span>Shapiro filling fast</span>
+  </div>
+
+  <nav class="nav" aria-label="Main">
+    <button class="on" aria-current="page"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="8" height="8"/><rect x="13" y="3" width="8" height="8"/><rect x="3" y="13" width="8" height="8"/><rect x="13" y="13" width="8" height="8"/></svg>Board</button>
+    <button><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M8 6h13M8 12h13M8 18h13M3.5 6h.01M3.5 12h.01M3.5 18h.01"/></svg>List</button>
+    <button><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round" aria-hidden="true"><path d="m12 3.5 2.6 5.3 5.9.9-4.3 4.1 1 5.8-5.2-2.7-5.2 2.7 1-5.8L3.5 9.7l5.9-.9z"/></svg>Saved</button>
+    <button><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 20c1.5-3.5 4.5-5 8-5s6.5 1.5 8 5"/></svg>You</button>
+  </nav>
+</body>
+</html>

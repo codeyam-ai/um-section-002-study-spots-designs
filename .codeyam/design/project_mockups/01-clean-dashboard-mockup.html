@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="codeyam-viewport" content="mobile">
+<title>Calm map with a nearby list</title>
+<style>
+  :root {
+    --bg-base: #f5f7fa;
+    --bg-surface: #ffffff;
+    --bg-muted: #eef1f5;
+    --bg-active: #e6edf6;
+    --text-primary: #0f1b2d;
+    --text-secondary: #5d6878;
+    --text-tertiary: #8f99a8;
+    --border: #e3e7ed;
+    --border-strong: #cdd3dc;
+    --shadow-sm: 0 1px 3px rgba(0, 39, 76, 0.07), 0 1px 2px rgba(0, 39, 76, 0.05);
+    --shadow-md: 0 -6px 20px rgba(0, 39, 76, 0.10);
+
+    --brand: #00274c;
+    --brand-ink: #ffffff;
+    --maize: #ffcb05;
+
+    --open: #1e8a4c;
+    --open-bg: #dcf2e4;
+    --open-text: #11603a;
+    --few: #d9650f;
+    --few-bg: #fde9d8;
+    --few-text: #8f3f06;
+    --full: #c9302c;
+    --full-bg: #fbe0de;
+    --full-text: #8f1d1a;
+
+    --map-ground: #eef2f6;
+    --map-street: #ffffff;
+    --map-green: #e1ecdf;
+    --map-path: #d3dce6;
+    --map-idle: #d9dfe7;
+    --map-label: #3b4656;
+
+    --radius-sm: 6px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+    --radius-xl: 16px;
+    --radius-full: 9999px;
+
+    --font: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+    color-scheme: light;
+  }
+  :root[data-theme="dark"] {
+    --bg-base: #0b1420;
+    --bg-surface: #13202f;
+    --bg-muted: #1b2a3c;
+    --bg-active: #1f3350;
+    --text-primary: #e8edf4;
+    --text-secondary: #a2adbd;
+    --text-tertiary: #6d798b;
+    --border: #233347;
+    --border-strong: #31455d;
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.35);
+    --shadow-md: 0 -6px 20px rgba(0, 0, 0, 0.45);
+
+    --brand: #ffcb05;
+    --brand-ink: #0b1420;
+
+    --open: #3fc27a;
+    --open-bg: #143524;
+    --open-text: #7fe0a8;
+    --few: #f08a3c;
+    --few-bg: #3a2414;
+    --few-text: #f6b382;
+    --full: #ef5f58;
+    --full-bg: #3d1a1a;
+    --full-text: #f6a19c;
+
+    --map-ground: #101b28;
+    --map-street: #1c2b3d;
+    --map-green: #14271f;
+    --map-path: #23364b;
+    --map-idle: #23344a;
+    --map-label: #c4cdd9;
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--bg-base); }
+  body {
+    font-family: var(--font);
+    color: var(--text-primary);
+    font-size: 14px;
+    line-height: 1.4;
+    -webkit-font-smoothing: antialiased;
+    min-height: 844px;
+    position: relative;
+    overflow: hidden;
+  }
+  button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+  button:focus-visible, a:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
+
+  .top { padding: 56px 16px 0; }
+  .bar { display: flex; align-items: center; gap: 12px; }
+  .mark { width: 32px; height: 32px; border-radius: var(--radius-md); background: var(--brand); color: var(--brand-ink); display: grid; place-items: center; font-weight: 700; font-size: 15px; letter-spacing: -0.02em; }
+  :root[data-theme="dark"] .mark { background: var(--maize); }
+  .who { flex: 1; }
+  .who h1 { font-size: 18px; font-weight: 600; letter-spacing: -0.01em; }
+  .who p { font-size: 12px; color: var(--text-secondary); }
+  .avatar { width: 32px; height: 32px; border-radius: var(--radius-full); background: var(--bg-active); color: var(--text-primary); font-size: 12px; font-weight: 600; display: grid; place-items: center; }
+
+  .search { margin-top: 14px; display: flex; align-items: center; gap: 8px; height: 40px; padding: 0 12px; background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--radius-md); color: var(--text-tertiary); font-size: 14px; }
+  .search svg { flex: none; }
+
+  .chips { display: flex; gap: 8px; margin-top: 10px; overflow: hidden; }
+  .chip { flex: none; height: 30px; padding: 0 12px; border-radius: var(--radius-full); border: 1px solid var(--border-strong); background: var(--bg-surface); font-size: 13px; font-weight: 500; color: var(--text-secondary); display: inline-flex; align-items: center; gap: 6px; }
+  .chip.on { background: var(--bg-active); border-color: var(--bg-active); color: var(--text-primary); font-weight: 600; }
+
+  .mapcard { margin: 12px 16px 0; background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); overflow: hidden; position: relative; }
+  .mapcard svg { display: block; width: 100%; height: auto; }
+  .legend { position: absolute; left: 10px; top: 10px; display: flex; gap: 10px; padding: 6px 10px; background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--radius-full); font-size: 11px; color: var(--text-secondary); }
+  .legend span { display: inline-flex; align-items: center; gap: 5px; }
+  .sw { width: 8px; height: 8px; border-radius: 2px; }
+  .sw.o { background: var(--open); } .sw.f { background: var(--few); } .sw.x { background: var(--full); }
+  .updated { position: absolute; right: 10px; bottom: 8px; font-size: 11px; color: var(--text-tertiary); }
+
+  .sheet { position: absolute; left: 0; right: 0; bottom: 0; height: 384px; background: var(--bg-surface); border-top: 1px solid var(--border); border-radius: var(--radius-xl) var(--radius-xl) 0 0; box-shadow: var(--shadow-md); padding: 8px 16px 0; }
+  .grab { width: 36px; height: 4px; border-radius: var(--radius-full); background: var(--border-strong); margin: 0 auto 10px; }
+  .sheet-head { display: flex; align-items: baseline; justify-content: space-between; }
+  .sheet-head h2 { font-size: 16px; font-weight: 600; text-wrap: balance; }
+  .sort { font-size: 13px; color: var(--text-secondary); display: inline-flex; align-items: center; gap: 4px; }
+
+  .warn { margin-top: 10px; display: flex; gap: 10px; align-items: center; padding: 10px 12px; border-radius: var(--radius-md); background: var(--few-bg); color: var(--few-text); font-size: 13px; }
+  .warn strong { font-weight: 600; }
+
+  .rows { margin-top: 6px; }
+  .row { display: grid; grid-template-columns: 1fr auto; gap: 2px 12px; padding: 11px 0; border-bottom: 1px solid var(--border); align-items: center; }
+  .row:last-child { border-bottom: 0; }
+  .row .name { font-size: 14px; font-weight: 600; }
+  .row .meta { font-size: 12px; color: var(--text-secondary); font-variant-numeric: tabular-nums; }
+  .row .right { grid-row: 1 / span 2; grid-column: 2; text-align: right; }
+  .seats { font-size: 17px; font-weight: 600; font-variant-numeric: tabular-nums; letter-spacing: -0.01em; }
+  .badge { display: inline-block; margin-top: 2px; padding: 2px 8px; border-radius: var(--radius-sm); font-size: 11px; font-weight: 600; }
+  .b-open { background: var(--open-bg); color: var(--open-text); }
+  .b-few { background: var(--few-bg); color: var(--few-text); }
+  .b-full { background: var(--full-bg); color: var(--full-text); }
+
+  .tabs { position: absolute; left: 0; right: 0; bottom: 0; height: 82px; padding: 8px 12px calc(24px + env(safe-area-inset-bottom)); background: var(--bg-surface); border-top: 1px solid var(--border); display: grid; grid-template-columns: repeat(4, 1fr); }
+  .tab { display: flex; flex-direction: column; align-items: center; gap: 3px; font-size: 11px; color: var(--text-tertiary); font-weight: 500; }
+  .tab.on { color: var(--text-primary); font-weight: 600; }
+  .tab.on svg { color: var(--brand); }
+  :root[data-theme="dark"] .tab.on svg { color: var(--maize); }
+
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+  <header class="top">
+    <div class="bar">
+      <div class="mark" aria-hidden="true">S</div>
+      <div class="who">
+        <h1>Stacks</h1>
+        <p>Near Angell Hall, 2:48&nbsp;PM</p>
+      </div>
+      <div class="avatar" aria-label="Signed in as Maya Okafor">MO</div>
+    </div>
+    <div class="search" role="search">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      Search libraries and study spots
+    </div>
+    <div class="chips">
+      <button class="chip on">Desk</button>
+      <button class="chip">Group table</button>
+      <button class="chip">Outlets</button>
+      <button class="chip">Windows</button>
+      <button class="chip">Open now</button>
+    </div>
+  </header>
+
+  <section class="mapcard" aria-label="Campus map of study spots">
+    <svg viewBox="0 0 358 300" width="358" height="300" role="img" aria-label="Central Campus, colored by open seats">
+      <rect width="358" height="300" fill="var(--map-ground)"/>
+      <!-- streets -->
+      <rect x="0" y="40" width="358" height="10" fill="var(--map-street)"/>
+      <rect x="0" y="214" width="358" height="10" fill="var(--map-street)"/>
+      <rect x="58" y="0" width="10" height="300" fill="var(--map-street)"/>
+      <rect x="282" y="0" width="10" height="300" fill="var(--map-street)"/>
+      <!-- Diag -->
+      <rect x="110" y="96" width="162" height="102" rx="4" fill="var(--map-green)"/>
+      <path d="M112 98 L270 196 M270 98 L112 196 M191 98 V196" stroke="var(--map-path)" stroke-width="3" fill="none"/>
+      <!-- idle buildings -->
+      <rect x="146" y="200" width="40" height="10" rx="2" fill="var(--map-idle)"/>
+      <rect x="10" y="60" width="40" height="44" rx="2" fill="var(--map-idle)"/>
+      <rect x="10" y="114" width="40" height="40" rx="2" fill="var(--map-idle)"/>
+      <rect x="296" y="96" width="52" height="50" rx="2" fill="var(--map-idle)"/>
+      <rect x="296" y="232" width="52" height="56" rx="2" fill="var(--map-idle)"/>
+      <rect x="150" y="232" width="36" height="56" rx="2" fill="var(--map-idle)"/>
+      <!-- League (few) -->
+      <rect x="98" y="8" width="46" height="26" rx="3" fill="var(--few-bg)" stroke="var(--few)" stroke-width="1.5"/>
+      <!-- Taubman (open) -->
+      <rect x="298" y="6" width="50" height="28" rx="3" fill="var(--open-bg)" stroke="var(--open)" stroke-width="1.5"/>
+      <!-- Hatcher (open) -->
+      <rect x="132" y="56" width="72" height="30" rx="3" fill="var(--open-bg)" stroke="var(--open)" stroke-width="1.5"/>
+      <!-- Shapiro (few) -->
+      <rect x="210" y="52" width="44" height="36" rx="3" fill="var(--few-bg)" stroke="var(--few)" stroke-width="1.5"/>
+      <!-- Angell / Fishbowl (full) -->
+      <rect x="74" y="58" width="26" height="112" rx="3" fill="var(--full-bg)" stroke="var(--full)" stroke-width="1.5"/>
+      <!-- Union (open) -->
+      <rect x="8" y="170" width="44" height="40" rx="3" fill="var(--open-bg)" stroke="var(--open)" stroke-width="1.5"/>
+      <!-- Law Reading Room (open, closing) -->
+      <rect x="74" y="230" width="66" height="44" rx="3" fill="var(--open-bg)" stroke="var(--open)" stroke-width="1.5"/>
+      <!-- Ross (full) -->
+      <rect x="200" y="232" width="76" height="50" rx="3" fill="var(--full-bg)" stroke="var(--full)" stroke-width="1.5"/>
+
+      <!-- labels -->
+      <g font-family="system-ui, -apple-system, Segoe UI, Roboto, sans-serif" font-size="10" font-weight="600" fill="var(--map-label)">
+        <text x="168" y="74" text-anchor="middle">Hatcher</text>
+        <text x="232" y="74" text-anchor="middle">Shapiro</text>
+        <text x="121" y="25" text-anchor="middle">League</text>
+        <text x="323" y="24" text-anchor="middle">Taubman</text>
+        <text x="30" y="194" text-anchor="middle">Union</text>
+        <text x="107" y="249" text-anchor="middle">Law</text>
+        <text x="107" y="261" text-anchor="middle" font-weight="500">Reading Rm</text>
+        <text x="238" y="261" text-anchor="middle">Ross</text>
+        <text x="87" y="118" text-anchor="middle" transform="rotate(-90 87 118)">Fishbowl</text>
+        <text x="191" y="152" text-anchor="middle" font-weight="500" fill="var(--text-tertiary)">The Diag</text>
+      </g>
+      <!-- you -->
+      <circle cx="104" cy="182" r="14" fill="var(--brand)" opacity="0.12"/>
+      <circle cx="104" cy="182" r="6.5" fill="var(--brand)" stroke="var(--maize)" stroke-width="2.5"/>
+    </svg>
+    <div class="legend" aria-hidden="true"><span><i class="sw o"></i>Open</span><span><i class="sw f"></i>Few left</span><span><i class="sw x"></i>Full</span></div>
+  </section>
+
+  <section class="sheet" aria-label="Study spots near you">
+    <div class="grab" aria-hidden="true"></div>
+    <div class="sheet-head">
+      <h2>Desks near you</h2>
+      <button class="sort">Closest
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+      </button>
+    </div>
+    <div class="warn" role="status">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+      <span><strong>Law Reading Room closes at 4:00&nbsp;PM.</strong> That’s 1&nbsp;hr 12&nbsp;min from now.</span>
+    </div>
+    <div class="rows">
+      <div class="row">
+        <div class="name">Fishbowl, Angell Hall</div>
+        <div class="meta">1 min walk · Open until 9&nbsp;PM</div>
+        <div class="right"><div class="seats">0</div><span class="badge b-full">Full</span></div>
+      </div>
+      <div class="row">
+        <div class="name">Law Reading Room</div>
+        <div class="meta">3 min walk · Closes 4:00&nbsp;PM</div>
+        <div class="right"><div class="seats">22</div><span class="badge b-open">Open</span></div>
+      </div>
+      <div class="row">
+        <div class="name">Hatcher Graduate Library</div>
+        <div class="meta">4 min walk · Open until 11&nbsp;PM</div>
+        <div class="right"><div class="seats">128</div><span class="badge b-open">Open</span></div>
+      </div>
+      <div class="row">
+        <div class="name">Shapiro Library</div>
+        <div class="meta">5 min walk · Open 24 hours</div>
+        <div class="right"><div class="seats">14</div><span class="badge b-few">Few left</span></div>
+      </div>
+    </div>
+  </section>
+
+  <nav class="tabs" aria-label="Main">
+    <button class="tab on" aria-current="page">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M3 6.5 9 4l6 2.5L21 4v13.5L15 20l-6-2.5L3 20z"/><path d="M9 4v13.5M15 6.5V20"/></svg>Map</button>
+    <button class="tab">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M8 6h13M8 12h13M8 18h13M3.5 6h.01M3.5 12h.01M3.5 18h.01"/></svg>List</button>
+    <button class="tab">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="m12 3.5 2.6 5.3 5.9.9-4.3 4.1 1 5.8-5.2-2.7-5.2 2.7 1-5.8L3.5 9.7l5.9-.9z"/></svg>Saved</button>
+    <button class="tab">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg>Preferences</button>
+  </nav>
+</body>
+</html>

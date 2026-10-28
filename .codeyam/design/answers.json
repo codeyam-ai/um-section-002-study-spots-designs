@@ -1,0 +1,54 @@
+{
+  "answers": {
+    "avoid": [
+      "Childish or cartoony",
+      "A generic map app"
+    ],
+    "count": [
+      "6"
+    ],
+    "lead": [
+      "Michigan blue",
+      "Maize"
+    ],
+    "look": {
+      "sliders": {},
+      "text": "",
+      "words": [
+        "School spirit",
+        "Trustworthy"
+      ]
+    },
+    "page": [
+      "Campus heat map"
+    ]
+  },
+  "own": {},
+  "summary": [
+    {
+      "answer": "Campus heat map",
+      "id": "page",
+      "title": "Which screen should I design first?"
+    },
+    {
+      "answer": "school spirit, trustworthy",
+      "id": "look",
+      "title": "What should it feel like when you open it on the way out of class?"
+    },
+    {
+      "answer": "Michigan blue, Maize",
+      "id": "lead",
+      "title": "Which color should lead the screen?"
+    },
+    {
+      "answer": "Childish or cartoony, A generic map app",
+      "id": "avoid",
+      "title": "What should it definitely not look like?"
+    },
+    {
+      "answer": "6",
+      "id": "count",
+      "title": "How many directions should I design?"
+    }
+  ]
+}

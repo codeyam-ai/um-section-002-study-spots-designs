@@ -1,0 +1,45 @@
+{
+  "title": "Quick questions before I design this",
+  "lede": "A phone app for Michigan students to see, between classes, which libraries and study spots have open seats or group tables, in maize and blue with clear green and red for open and full.",
+  "questions": [
+    { "id": "page", "type": "single", "title": "Which screen should I design first?",
+      "why": "Every design shows the same screen so you can compare them side by side, and your brief describes a few equally important ones.",
+      "options": [
+        { "label": "Where can I study now?", "detail": "A list of nearby spots, each showing open or full at a glance, with filters and closing-soon warnings" },
+        { "label": "Campus heat map", "detail": "A map of campus where buildings glow green or red by how busy they are" },
+        { "label": "One study spot", "detail": "A single building, like Ross or the Shapiro Library: seats left, hours, floor plan and food nearby" }
+      ],
+      "ownPlaceholder": "Or describe another screen" },
+    { "id": "look", "type": "personality", "title": "What should it feel like when you open it on the way out of class?",
+      "why": "Your brief settles the colors but not the mood, and the mood decides type, spacing and how loud the screen is.",
+      "sliders": [ ["Playful", "Serious", 50], ["Calm", "Energetic", 40], ["Spacious", "Packed with info", 35] ],
+      "moreSliders": [ ["Warm", "Cool"], ["Classic", "Modern"] ],
+      "words": ["Quick", "Calm", "School spirit", "Friendly", "Trustworthy", "Cozy"],
+      "moreWords": ["Bold", "Minimal", "Sporty", "Studious"],
+      "maxWords": 4,
+      "textPlaceholder": "e.g. Like a transit app, but for seats" },
+    { "id": "lead", "type": "palette", "title": "Which color should lead the screen?",
+      "why": "Green and red will carry open and full, so the brand colors need a clear job that does not compete with them.",
+      "options": [
+        { "label": "Michigan blue", "hex": "#00274C", "detail": "Deep blue base, maize as a small highlight" },
+        { "label": "Maize", "hex": "#FFCB05", "detail": "Bright and spirited, blue for text" },
+        { "label": "Mostly white", "hex": "#F7F8FA", "detail": "Quiet background so green and red do the talking" }
+      ] },
+    { "id": "avoid", "type": "multi", "max": 3, "title": "What should it definitely not look like?",
+      "why": "Ruling things out is the fastest way to keep the designs from all looking the same.",
+      "options": [
+        { "label": "An official university website" },
+        { "label": "Game-day merch" },
+        { "label": "A busy data dashboard" },
+        { "label": "A generic map app" },
+        { "label": "Childish or cartoony" }
+      ] },
+    { "id": "count", "type": "single", "title": "How many directions should I design?",
+      "why": "More directions give more range; fewer are quicker to compare.",
+      "options": [ { "label": "2" }, { "label": "4" }, { "label": "6", "detail": "Recommended" }, { "label": "8" } ] },
+    { "id": "extra", "type": "free", "title": "Anything else? An app or object you'd like it compared to?",
+      "why": "Optional. Even something that isn't an app, like a train departure board, helps a lot.",
+      "placeholder": "e.g. Clean like Apple Maps, or a departure board at the airport" }
+  ],
+  "defaults": { "page": "Where can I study now?", "look": { "words": ["Quick", "Calm", "Trustworthy"] }, "lead": "Michigan blue", "avoid": ["An official university website", "A busy data dashboard"], "count": "6" }
+}
